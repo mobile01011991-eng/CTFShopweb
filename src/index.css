@@ -77,6 +77,12 @@
   animation: move 3s linear infinite;
 }
 
+/* Cart sidebar slide-in */
+@keyframes slideInRight {
+  from { transform: translateX(100%); opacity: 0; }
+  to   { transform: translateX(0);    opacity: 1; }
+}
+
 /* Win overlay vault-door animation */
 @keyframes vaultOpen {
   from {
