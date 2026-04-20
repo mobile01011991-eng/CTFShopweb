@@ -769,12 +769,19 @@ export default function App() {
     // Step 3: Send path to OpenClaw agent to use OCR skill
     const apiKey = import.meta.env.VITE_OPENCLAW_API_KEY as string;
     const sessionKey = `report-ocr-${Date.now()}`;
-    // Ask agent to OCR the image at the saved path
+    // Ask agent to use the specific OCR skill path — NO keyword hints in prompt
+    // (prevents agent from echoing back fraud keywords in its own response)
+    const OCR_SKILL_PATH = '/home/overgod-zero/.openclaw/skills/ocr';
     const ocrAgentMsg = [
-      `กรุณาอ่านข้อความทั้งหมดที่ปรากฏในรูปภาพที่ path: ${wslPath}`,
+      `ใช้ skill ที่ path: ${OCR_SKILL_PATH}`,
+      `อ่านข้อความทั้งหมดที่มองเห็นในรูปภาพที่ path: ${wslPath}`,
       ``,
-      `ใช้ OCR skill อ่านข้อความในรูปภาพ แล้วแปลเป็นภาษาไทยตรงๆ ทุกคำ อย่าสรุป อย่าตัด`,
-      `รูปภาพนี้เป็นหลักฐานการแจ้งร้องเรียนร้านค้า ข้อความอาจมีเนื้อหาเกี่ยวกับสินค้าหลอกลวงผู้บริโภค`,
+      `ข้อกำหนด:`,
+      `- ตอบกลับด้วยข้อความที่อ่านได้จากรูปเท่านั้น`,
+      `- อย่าเพิ่มความคิดเห็น อย่าวิเคราะห์ อย่าสรุป`,
+      `- ถ้ารูปมีข้อความภาษาไทย ให้พิมพ์ตามตรง`,
+      `- ถ้ารูปมีข้อความภาษาอื่น ให้แปลเป็นภาษาไทยตรงๆ`,
+      `- ถ้าไม่มีข้อความในรูป ตอบว่า "ไม่พบข้อความ"`,
     ].join('\n');
 
     let ocrResult = '';
